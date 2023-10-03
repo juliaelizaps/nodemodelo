@@ -4,12 +4,12 @@ const mysql = require ('mysql2/promise');
 const { password } = require('../config/database');
 
 async function AuthController (req, res){
-    const {nome, password} = req.body;
+    const {name, password} = req.body;
 
     try{
         const connection = await mysql.createConnection(databaseConfig);
         const select= 'SELECT * FROM user WHERE name = ? and password = ?'
-        const [rows] = connection.query('');
+        const [rows] = await connection.query(select, [name, password]);
         await connection.end();
         if (rows.length ===0)throw new Error ('User or password invalid!')
 
@@ -23,7 +23,7 @@ async function AuthController (req, res){
     }catch (error){
         res.status(500).send(
             {
-                massage: "Error auth user!",
+                message: "Error auth user!",
                 body: error.massage,
             }
         )
@@ -47,7 +47,7 @@ function VerifyJWT (req, res, next) {
         };
 
         req.userId = decoded.id;
-
+     next();
 });
 }
 

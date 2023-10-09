@@ -33,7 +33,7 @@ async function AuthController (req, res){
 function VerifyJWT (req, res, next) {
     const token = req.headers ['x-access-token'];
 
-    if (!token) req.status(500).send({
+    if (!token) res.status(500).send({
         auth:false,
         body: 'no token provided!',
     })
